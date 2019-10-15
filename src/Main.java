@@ -1,11 +1,12 @@
 import java.util.Scanner;
 
 public class Main {
+    public static Trip trip = null;
 
     public static void main(String[] args) throws Throwable {
         Scanner keyboard = new Scanner(System.in);
-        Trip trip = null;
-        System.out.println("1)Start a Trip\n2)Stop a trip\n3)Total Trip Kilometers\n4)Add Trip Kilometers\n5)Set Consumption ");
+
+        System.out.println("1)Start a Trip\n2)Stop a trip\n3)Total Trip Kilometers\n4)Add Trip Kilometers\nOr Press 0 to stop");
         int choice = 100;
         do {
             try {
@@ -14,14 +15,21 @@ public class Main {
 
                 switch (choice) {
                     case (1):
-                        trip = new Trip();
+                        if (!isIntialized()) {
+                            //Πετάμε exception ώστε να πάει στο Catch και να μας πεί οτι υπάρχει ήδη ταξίδι στην μνήμη
+                            throw new NullPointerException();
+                        }
+                        System.out.println("Set Concumption");
+                        float consumption = keyboard.nextFloat();
+                        trip = new Trip(consumption);
                         System.out.println("New Trip Stared!");
                         break;
                     case (2):
 
+                        System.out.println("Trip Stoped");
+                        System.out.println("You have used " + trip.Calculate() + " litres of Gas");
                         trip.EmptyTrip();
                         trip = null;
-                        System.out.println("Trip Deleted");
                         break;
                     case (3):
 
@@ -34,12 +42,6 @@ public class Main {
                         int kilometers = keyboard.nextInt();
                         trip.AddKilometers(kilometers);
                         break;
-                    case (5):
-                        System.out.print("Consumption: ");
-                        System.out.println();
-                        float consumption = keyboard.nextFloat();
-                        trip.setConsumption(consumption);
-
 
                 }
 
@@ -51,5 +53,11 @@ public class Main {
         } while (choice != 0);
 
 
+    }
+
+    private static boolean isIntialized() {
+        if (trip != null)
+            return false;
+        return true;
     }
 }
